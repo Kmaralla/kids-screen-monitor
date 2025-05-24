@@ -13,12 +13,20 @@ class EmailService {
       const data = await chrome.storage.local.get('emailjsConfig');
       this.emailjsConfig = data.emailjsConfig;
       
+      console.log('EmailJS config from storage:', this.emailjsConfig ? 'Found' : 'Not found');
+      
       if (this.emailjsConfig && this.emailjsConfig.serviceId && this.emailjsConfig.templateId && this.emailjsConfig.publicKey) {
         this.isInitialized = true;
-        console.log('EmailJS service initialized');
+        console.log('EmailJS service initialized successfully');
+        console.log('Service ID:', this.emailjsConfig.serviceId);
+        console.log('Template ID:', this.emailjsConfig.templateId);
+        console.log('Public Key:', this.emailjsConfig.publicKey.substring(0, 8) + '...');
         return true;
       } else {
-        console.log('EmailJS not configured');
+        console.log('EmailJS not configured - missing required fields');
+        console.log('Has serviceId:', !!this.emailjsConfig?.serviceId);
+        console.log('Has templateId:', !!this.emailjsConfig?.templateId);
+        console.log('Has publicKey:', !!this.emailjsConfig?.publicKey);
         return false;
       }
     } catch (error) {
@@ -36,6 +44,7 @@ class EmailService {
     }
 
     try {
+      console.log('Sending email with template params:', Object.keys(templateParams));
       const response = await this.callEmailJS(templateParams);
       console.log('Email sent successfully:', response);
       return { success: true, response };
@@ -55,6 +64,15 @@ class EmailService {
       template_params: templateParams
     };
 
+    console.log('Making request to EmailJS API...');
+    console.log('URL:', url);
+    console.log('Payload structure:', {
+      service_id: payload.service_id,
+      template_id: payload.template_id,
+      user_id: payload.user_id.substring(0, 8) + '...',
+      template_params_keys: Object.keys(payload.template_params)
+    });
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -63,12 +81,33 @@ class EmailService {
       body: JSON.stringify(payload)
     });
 
+    console.log('EmailJS API response status:', response.status);
+    console.log('EmailJS API response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`EmailJS API error: ${response.status} - ${errorText}`);
+      console.error('EmailJS API error response:', errorText);
+      
+      // Try to parse error details
+      let errorMessage = `EmailJS API error: ${response.status}`;
+      try {
+        const errorJson = JSON.parse(errorText);
+        if (errorJson.message) {
+          errorMessage += ` - ${errorJson.message}`;
+        }
+        if (errorJson.error) {
+          errorMessage += ` - ${errorJson.error}`;
+        }
+      } catch (parseError) {
+        errorMessage += ` - ${errorText}`;
+      }
+      
+      throw new Error(errorMessage);
     }
 
-    return response.text();
+    const responseText = await response.text();
+    console.log('EmailJS API success response:', responseText);
+    return responseText;
   }
 
   async sendDailyReport(report, parentEmail) {
@@ -134,6 +173,14 @@ class EmailService {
   }
 
   async testEmail(parentEmail) {
+    // Validate configuration first
+    const validationResult = await this.validateConfiguration();
+    if (!validationResult.isValid) {
+      throw new Error(`Configuration validation failed: ${validationResult.errors.join(', ')}`);
+    }
+
+    console.log('EmailJS configuration validated successfully');
+
     const testReport = {
       date: new Date().toISOString().split('T')[0],
       totalTimeMinutes: 45,
@@ -150,6 +197,60 @@ class EmailService {
     };
 
     return await this.sendDailyReport(testReport, parentEmail);
+  }
+
+  async validateConfiguration() {
+    const errors = [];
+    let config = null;
+
+    try {
+      const data = await chrome.storage.local.get('emailjsConfig');
+      config = data.emailjsConfig;
+    } catch (error) {
+      errors.push('Failed to read configuration from storage');
+      return { isValid: false, errors };
+    }
+
+    if (!config) {
+      errors.push('No EmailJS configuration found');
+      return { isValid: false, errors };
+    }
+
+    // Validate required fields
+    if (!config.serviceId || config.serviceId.trim() === '') {
+      errors.push('Service ID is missing or empty');
+    }
+
+    if (!config.templateId || config.templateId.trim() === '') {
+      errors.push('Template ID is missing or empty');
+    }
+
+    if (!config.publicKey || config.publicKey.trim() === '') {
+      errors.push('Public Key is missing or empty');
+    }
+
+    // Validate format (basic checks)
+    if (config.serviceId && !config.serviceId.match(/^service_[a-zA-Z0-9]+$/)) {
+      errors.push('Service ID format appears incorrect (should start with "service_")');
+    }
+
+    if (config.templateId && !config.templateId.match(/^template_[a-zA-Z0-9]+$/)) {
+      errors.push('Template ID format appears incorrect (should start with "template_")');
+    }
+
+    if (config.publicKey && config.publicKey.length < 10) {
+      errors.push('Public Key appears too short');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      config: config ? {
+        serviceId: config.serviceId,
+        templateId: config.templateId,
+        publicKeyLength: config.publicKey?.length || 0
+      } : null
+    };
   }
 }
 
