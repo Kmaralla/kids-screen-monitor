@@ -1,6 +1,6 @@
 # 🛡️ KidsWatch Chrome Extension - Installation Guide
 
-## What You Get (Phase 1 MVP)
+## What You Get 
 ✅ **Website Time Tracking** - Monitors time spent on each site  
 ✅ **5-minute Timeout** - Blocks non-allowed sites after 5 minutes  
 ✅ **Smart Allowlist** - Pre-configured with educational sites  
