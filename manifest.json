@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "KidsWatch - Parental Control",
+  "version": "1.0",
+  "description": "Monitor kids' browsing time with allowlist and daily reports",
+  
+  "permissions": [
+    "tabs",
+    "storage",
+    "alarms",
+    "activeTab"
+  ],
+  
+  "host_permissions": [
+    "https://api.emailjs.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  
+  "action": {
+    "default_popup": "html/popup.html",
+    "default_title": "KidsWatch Controls"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["html/timeout.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

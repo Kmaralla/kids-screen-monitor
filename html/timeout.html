@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Time's Up - KidsWatch</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+    }
+    
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+      animation: fadeIn 1s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .icon {
+      font-size: 120px;
+      margin-bottom: 30px;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .message {
+      font-size: 20px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+    
+    .fun-facts {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 30px 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    .fun-facts h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #FFE4B5;
+    }
+    
+    .fact {
+      font-size: 16px;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .timer {
+      font-size: 24px;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    
+    .suggestions {
+      margin-top: 30px;
+    }
+    
+    .suggestion-item {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    
+    .suggestion-item:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .floating-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    .shape:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      font-size: 40px;
+      animation-delay: 0s;
+    }
+    
+    .shape:nth-child(2) {
+      top: 60%;
+      right: 10%;
+      font-size: 35px;
+      animation-delay: 1s;
+    }
+    
+    .shape:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      font-size: 45px;
+      animation-delay: 2s;
+    }
+    
+    .shape:nth-child(4) {
+      top: 30%;
+      right: 30%;
+      font-size: 30px;
+      animation-delay: 3s;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-shapes">
+    <div class="shape">🌟</div>
+    <div class="shape">🎨</div>
+    <div class="shape">📚</div>
+    <div class="shape">🎵</div>
+  </div>
+  
+  <div class="container">
+    <div class="icon">⏰</div>
+    <h1>Time's Up!</h1>
+    <div class="message">
+      Great job browsing! Now it's time to take a healthy break. 
+      <br>Your screen time has been paused for your wellbeing.
+    </div>
+    
+    <div class="timer">
+      ⏳ Break time: <span id="breakTimer">5:00</span>
+    </div>
+    
+    <div class="fun-facts">
+      <h3>🧠 Did You Know?</h3>
+      <div class="fact" id="funFact">Loading amazing fact...</div>
+    </div>
+    
+    <div class="suggestions">
+      <h3 style="margin-bottom: 15px;">🌟 Things to do during your break:</h3>
+      <div class="suggestion-item">🚶‍♀️ Take a walk</div>
+      <div class="suggestion-item">💧 Drink water</div>
+      <div class="suggestion-item">🤸‍♀️ Stretch</div>
+      <div class="suggestion-item">📖 Read a book</div>
+      <div class="suggestion-item">🎨 Draw something</div>
+      <div class="suggestion-item">🧘‍♀️ Take deep breaths</div>
+    </div>
+  </div>
+  
+  <script>
+    // Fun facts for kids
+    const funFacts = [
+      "Your brain needs breaks to process information better! 🧠",
+      "Looking at something 20 feet away for 20 seconds helps your eyes! 👀",
+      "Walking for just 5 minutes can boost your creativity by 60%! 🚶‍♀️",
+      "Drinking water helps your brain work better and faster! 💧",
+      "Deep breathing for 1 minute can help you feel calmer and focused! 🧘‍♀️",
+      "Stretching helps your body feel more energized and happy! 🤸‍♀️",
+      "Your eyes blink 3 times less when looking at screens! 👁️",
+      "Taking breaks actually helps you learn and remember things better! 📚",
+    ];
+    
+    // Display random fun fact
+    document.getElementById('funFact').textContent = 
+      funFacts[Math.floor(Math.random() * funFacts.length)];
+    
+    // Countdown timer (5 minute break)
+    let timeLeft = 5 * 60; // 5 minutes in seconds
+    const timerElement = document.getElementById('breakTimer');
+    
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      
+      if (timeLeft > 0) {
+        timeLeft--;
+        setTimeout(updateTimer, 1000);
+      } else {
+        // Break is over, show completion message
+        document.querySelector('.container').innerHTML = `
+          <div class="icon">🎉</div>
+          <h1>Break Complete!</h1>
+          <div class="message">
+            Great job taking care of yourself! 
+            <br>You can now return to browsing allowed sites.
+          </div>
+          <div class="timer">
+            <a href="javascript:window.close()" style="color: white; text-decoration: none; font-size: 18px;">
+              ✨ Click here to continue ✨
+            </a>
+          </div>
+        `;
+      }
+    }
+    
+    // Start the timer
+    updateTimer();
+    
+    // Prevent going back
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+        window.history.go(1);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .section h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      color: #fff;
+    }
+    
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .setting-row:last-child {
+      margin-bottom: 0;
+    }
+    
+    input[type="number"], input[type="email"], textarea {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      padding: 8px;
+      color: white;
+      width: 120px;
+    }
+    
+    input[type="email"] {
+      width: 200px;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 60px;
+      resize: vertical;
+      font-family: inherit;
+    }
+    
+    input::placeholder, textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.3);
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    .btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .stats {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .site-list {
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 8px;
+    }
+    
+    .site-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .site-item:last-child {
+      border-bottom: none;
+    }
+    
+    .status {
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+    
+    .status.enabled {
+      background: rgba(76, 175, 80, 0.3);
+    }
+    
+    .status.disabled {
+      background: rgba(244, 67, 54, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ KidsWatch</h1>
+  </div>
+  
+  <div class="status" id="status">
+    Loading...
+  </div>
+  
+  <div class="section">
+    <h3>⚙️ Settings</h3>
+    <div class="setting-row">
+      <span>Enable Protection:</span>
+      <label class="toggle">
+        <input type="checkbox" id="enableToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="setting-row">
+      <span>Timeout (minutes):</span>
+      <input type="number" id="timeoutInput" min="1" max="60" value="5">
+    </div>
+    <div class="setting-row">
+      <span>Parent Email:</span>
+    </div>
+    <input type="email" id="emailInput" placeholder="parent@email.com" style="width: 100%; margin-top: 5px;">
+  </div>
+  
+  <div class="section">
+    <h3>✅ Allowlist</h3>
+    <textarea id="allowlistInput" placeholder="Enter allowed sites, one per line"></textarea>
+    <button class="btn" id="saveSettings">Save Settings</button>
+  </div>
+  
+  <div class="section">
+    <h3>📊 Today's Usage</h3>
+    <div class="stats">
+      <div>Total Time: <span id="totalTime">0 min</span></div>
+      <div>Sites Visited: <span id="sitesCount">0</span></div>
+    </div>
+    <div class="site-list" id="siteList">
+      <div style="text-align: center; color: rgba(255,255,255,0.6);">No data yet</div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <button class="btn" id="viewReports">View Reports</button>
+    <button class="btn" id="testEmail">Test Email Report</button>
+  </div>
+
+  <script src="../js/popup.js"></script>
+</body>
+</html>

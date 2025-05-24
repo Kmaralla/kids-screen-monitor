@@ -1,0 +1,29 @@
+# Chrome Extension
+*.crx
+*.pem
+key.pem
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Logs
+*.log
+
+# Node modules (if using build tools)
+node_modules/
+package-lock.json
+
+# Dist/build directories
+dist/
+build/ 
