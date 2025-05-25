@@ -1,4 +1,8 @@
-# 🛡️ KidsWatch Chrome Extension - Installation Guide
+# 🛡️ KidsWatch Chrome Extension
+
+## 📦 Ready-to-Install Chrome Extension
+
+**Get the complete extension from GitHub:** [https://github.com/Kmaralla/kids-screen-monitor](https://github.com/Kmaralla/kids-screen-monitor)
 
 ## What You Get
 ✅ **Website Time Tracking** - Monitors time spent on each site  
@@ -7,6 +11,7 @@
 ✅ **Beautiful UI** - Easy-to-use parent dashboard  
 ✅ **Real Email Reports** - Automatic daily reports via EmailJS  
 ✅ **Gentle Enforcement** - Kid-friendly timeout screen with activities  
+✅ **Complete Setup** - All files included, ready to install
 
 ## 📸 Screenshots
 
@@ -30,26 +35,29 @@
 
 ## Installation Steps
 
-### 1. Download the Files
-Copy each of the following files into a new folder on your computer:
+### 1. 📥 Download from GitHub
 
-**Required Files:**
-- `manifest.json`
-- `js/background.js` 
-- `js/popup.js`
-- `js/content.js`
-- `js/emailService.js`
-- `html/popup.html`
-- `html/timeout.html`
+**Option A: Clone with Git (Recommended)**
+```bash
+git clone https://github.com/Kmaralla/kids-screen-monitor.git
+cd kids-screen-monitor
+```
 
-### 2. Install in Chrome
+**Option B: Download ZIP**
+1. Go to [https://github.com/Kmaralla/kids-screen-monitor](https://github.com/Kmaralla/kids-screen-monitor)
+2. Click the green **"Code"** button
+3. Click **"Download ZIP"**
+4. Extract the ZIP file to a folder on your computer
+
+### 2. 🚀 Install in Chrome
+
 1. Open Chrome and go to `chrome://extensions/`
 2. Turn on **Developer mode** (toggle in top right)
 3. Click **Load unpacked**
-4. Select the folder containing your extension files
+4. Select the `kids-screen-monitor` folder (the one containing `manifest.json`)
 5. The KidsWatch extension should now appear in your extensions list
 
-### 3. Initial Setup
+### 3. ⚙️ Initial Setup
 1. Click the KidsWatch icon in your Chrome toolbar
 2. **Enable Protection** - Toggle to ON
 3. **Set Parent Email** - Enter your email for daily reports
@@ -197,6 +205,7 @@ Here's your child's browsing summary for 2024-05-24:
 - Make sure Developer mode is enabled
 - Check that all files are in the same folder
 - Refresh the extension in chrome://extensions/
+- Get the latest version from [GitHub](https://github.com/Kmaralla/kids-screen-monitor)
 
 **Not blocking sites?**
 - Verify Protection is enabled in settings
@@ -215,6 +224,10 @@ Here's your child's browsing summary for 2024-05-24:
 - Check EmailJS dashboard for sending limits
 - Ensure Gmail (or your provider) is properly connected
 - Try sending a test email from EmailJS dashboard first
+
+**Need help or found a bug?**
+- Check the [GitHub repository](https://github.com/Kmaralla/kids-screen-monitor) for updates
+- Open an issue on GitHub for support
 
 ## Technical Notes
 - Very lightweight (~5-10MB memory usage)
